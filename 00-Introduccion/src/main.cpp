@@ -82,6 +82,9 @@ Model modelDartLegoRightHand;
 Model modelDartLegoLeftLeg;
 Model modelDartLegoRightLeg;
 
+// Cybog
+Model cyborgModelAnimate;
+
 GLuint textureCespedID, textureWallID, textureWindowID, textureHighwayID, textureLandingPadID;
 GLuint skyboxTextureID;
 
@@ -111,6 +114,8 @@ glm::mat4 modelMatrixHeli = glm::mat4(1.0f);
 glm::mat4 modelMatrixLambo = glm::mat4(1.0);
 glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
+
+glm::mat4 modelMatrixCyborg = glm::mat4(1.0f);
 
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
 int modelSelected = 0;
@@ -287,6 +292,13 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelDartLegoLeftLeg.setShader(&shaderMulLighting);
 	modelDartLegoRightLeg.loadModel("../models/LegoDart/LeoDart_right_leg.obj");
 	modelDartLegoRightLeg.setShader(&shaderMulLighting);
+
+	// Cyborg
+	//cyborgModelAnimate.loadModel("../models/Crash/crashbandicoot.obj"); 
+	//cyborgModelAnimate.loadModel("../models/cyborg/cyborg.obj");
+	//cyborgModelAnimate.loadModel("../models/Donut/FirstDonut.obj");
+	//cyborgModelAnimate.loadModel("../models/rock/rock.obj");
+	cyborgModelAnimate.setShader(&shaderMulLighting);
 
 	camera->setPosition(glm::vec3(0.0, 3.0, 4.0));
 	
@@ -467,6 +479,8 @@ void destroy() {
 	boxHighway.destroy();
 	boxLandingPad.destroy();
 	esfera1.destroy();
+
+	cyborgModelAnimate.destroy();
 
 	// Custom objects Delete
 	modelAircraft.destroy();
@@ -974,6 +988,17 @@ void applicationLoop() {
 		modelMatrixDartRightLeg = glm::rotate(modelMatrixDartRightLeg, rotDartRightLeg, glm::vec3(0, 0, 1));
 		modelMatrixDartRightLeg = glm::translate(modelMatrixDartRightLeg, glm::vec3(0, -1.12632, 0.423349));
 		modelDartLegoRightLeg.render(modelMatrixDartRightLeg);
+
+		//Cyborg render
+		//cyborgModelAnimate.render(modelMatrixCyborg);
+
+		glm::mat4 modelMatrixCyborgBody = glm::mat4(modelMatrixCyborg);
+		//modelMatrixCyborgBody = glm::scale(modelMatrixCyborgBody, glm::vec3(2.0, 2.0, 2.0));
+		modelMatrixCyborgBody = glm::scale(modelMatrixCyborgBody, glm::vec3(0.01, 0.01, 0.01)); //---> Crash Bandicoot
+		modelMatrixCyborgBody = glm::translate(modelMatrixCyborgBody, glm::vec3(0, 0.6, -0.423));
+		cyborgModelAnimate.render(modelMatrixCyborgBody);
+		
+
 		// Se regresa el cull faces IMPORTANTE para la capa
 		glEnable(GL_CULL_FACE);
 
@@ -1001,7 +1026,7 @@ void applicationLoop() {
 }
 
 int main(int argc, char **argv) {
-	init(800, 700, "Window GLFW", false);
+	init(800, 700, "OpenGL Project", false);
 	applicationLoop();
 	destroy();
 	return 1;
